@@ -42,15 +42,12 @@ jobs:
           echo "Cloning AnyKernel3 and other dependencies..."
           
           # Define the branch names using the matrix values
-          ANYKERNEL_BRANCH="non-gki"
           SUSFS_BRANCH="kernel-4.14"
 
           # Debug print the branches
-          echo "Using branch for AnyKernel3: $ANYKERNEL_BRANCH"
           echo "Using branch for SUSFS: $SUSFS_BRANCH"
 
           # Clone repositories using the branch names
-          git clone https://github.com/WildPlusKernel/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
           git clone https://github.com/WildPlusKernel/kernel_patches.git
       
@@ -189,6 +186,7 @@ jobs:
           echo "Copying Image"
           cp ./out/android-msm-pixel-4.14/dist/Image.lz4 ../AnyKernel3/Image.lz4
           cp ./out/android-msm-pixel-4.14/dist/dtbo.img ../AnyKernel3/dtbo.img
+          mkdir Anykernel3
           
       - name: Create ZIP Files for Different Formats
         run: |
