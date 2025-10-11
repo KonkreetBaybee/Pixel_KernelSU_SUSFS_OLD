@@ -4,36 +4,41 @@
   uses: dabao1955/kernel_build_action@v1.8.3
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  Free-Space:
+    uses: fcbg-platforms/increase-disk-space@v0.1.0
+  with:
+    dotnet: true
+    old-dotnet: true
+    haskell: true
+    large-packages: true
+
+  Build-Kernel:
+    strategy:
+      fail-fast: true
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
-    - name: Android Kernel Build Action
-  uses: dabao1955/kernel_build_action@v1.8.3
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: Build Kernel
+        uses: dabao1955/kernel_build_action@main
+        with:
+          kernel-url: https://android.googlesource.com/kernel/msm/+/refs/heads/android-msm-coral-4.14-android13
+          kernel-dir: coral-msm-4.14
+          config: floral_defconfig
+          arch: arm64
+          aosp-gcc: true
+          aosp-clang: true
+          ksu: true
+          ksu-version: v0.9.5
+          lxc: true
+          lxc-patch: true
+          nethunter: true
+          nethunter-patch: true
+          android-version: 13
+          aosp-clang-version: r416183b1
+          disable-lto: false
+          anykernel3: true
